@@ -8,6 +8,8 @@ STARTUP_FILE=../Libraries/CMSIS/ST/STM32F4xx/Source/Templates/gcc_ride7/startup_
 
 LDSCRIPT = stm32_flash.ld
 
+GDB_FLAGS = -ex "target remote | openocd -c \"gdb_port pipe; log_output openocd.log\" -f board/stm32f4discovery.cfg"
+
 SEMIHOSTING_FLAGS = --specs=rdimon.specs -lc -lrdimon 
 
 # Inputs: C Sources, Assembler Sources
@@ -109,10 +111,8 @@ BOARDCONFIGPATH=board/stm32f4discovery.cfg
 .PHONY: clean
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE) $(TARGET)
-gdb:
-	
-	$(GDB) $(PROJ_NAME).elf -ex 'target remote | openocd -c "gdb_port pipe" -f $(BOARDCONFIGPATH)'
-	
+gdb: $(EXECUTABLE)
+	$(GDB) $< $(GDB_FLAGS)
 test:
-	@echo "$(SOURCES)"
+	@echo "$(EXECUTABLE)"
 	
