@@ -1,7 +1,18 @@
+#Project main setup
+
 PROJ_NAME=Template
+
 MCU=STM32F4xx
+
 STARTUP_FILE=../Libraries/CMSIS/ST/STM32F4xx/Source/Templates/gcc_ride7/startup_stm32f4xx.s
 
+LDSCRIPT = stm32_flash.ld
+
+# Inputs: C Sources, Assembler Sources
+SOURCES=main.c stm32f4xx_it.c system_stm32f4xx.c \
+../Utilities/STM32F4-Discovery/stm32f4_discovery.c \
+
+INCLUDES=
 
 # Autosearch and include everything from the inc sublfolder and compile everything 
 # from the src folder
@@ -28,14 +39,14 @@ MCFLAGS=-mcpu=cortex-m4 -mthumb -mlittle-endian \
 DEFS=-DUSE_STDPERIPH_DRIVER -DSTM32F4XX
 
 
-INCLUDES=-I. \
+INCLUDES+=-I. \
 -I../Utilities/STM32F4-Discovery \
 -I../Libraries/CMSIS/Include \
 
 STDLIB_INC+=../Libraries/$(MCU)_StdPeriph_Driver/inc \
 	    ../Libraries/CMSIS/ST/$(MCU)/Include \
 
-STDLIB_SRCS+=../Libraries/$(MCU)_StdPeriph_Driver/src/*.c
+STDLIB_SRCS+=$(wildcard ../Libraries/$(MCU)_StdPeriph_Driver/src/*.c)
 
 
 IINCDIR=$(patsubst %,-I%,$(STDLIB_INC) $(PROJ_INC))
@@ -44,13 +55,9 @@ IINCDIR=$(patsubst %,-I%,$(STDLIB_INC) $(PROJ_INC))
 
 CFLAGS=-c $(MCFLAGS) $(DEFS) $(INCLUDES) $(IINCDIR)
 
-LDSCRIPT = stm32_flash.ld
 
 LDFLAGS=-T $(LDSCRIPT) --specs=nosys.specs $(MCFLAGS)
 
-# Inputs: C Sources, Assembler Sources
-SOURCES=main.c stm32f4xx_it.c system_stm32f4xx.c \
-../Utilities/STM32F4-Discovery/stm32f4_discovery.c \
 
 # Compile everything form stdlibs
 SOURCES+= $(STDLIB_SRCS)
@@ -99,4 +106,5 @@ clean:
 gdb:
 	
 test:
-	@echo "$(STDLIB_INC)"
+	@echo "$(SOURCES)"
+	
