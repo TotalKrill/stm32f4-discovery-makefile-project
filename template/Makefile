@@ -34,6 +34,9 @@ GDB=arm-none-eabii-gdb
 
 # Build Parameters: MCU Flags, Definitions, Includes, 
 #                   Compile Flags, Linker Script, Linker Flags
+
+CFLAGS=-fdiagnostics-color=always
+
 MCFLAGS=-mcpu=cortex-m4 -mthumb -mlittle-endian \
 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork
 DEFS=-DUSE_STDPERIPH_DRIVER -DSTM32F4XX
@@ -53,7 +56,7 @@ IINCDIR=$(patsubst %,-I%,$(STDLIB_INC) $(PROJ_INC))
 
 
 
-CFLAGS=-c $(MCFLAGS) $(DEFS) $(INCLUDES) $(IINCDIR)
+CFLAGS+=-c $(MCFLAGS) $(DEFS) $(INCLUDES) $(IINCDIR)
 
 
 LDFLAGS=-T $(LDSCRIPT) --specs=nosys.specs $(MCFLAGS)
