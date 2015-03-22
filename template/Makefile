@@ -8,6 +8,8 @@ STARTUP_FILE=../Libraries/CMSIS/ST/STM32F4xx/Source/Templates/gcc_ride7/startup_
 
 LDSCRIPT = stm32_flash.ld
 
+SEMIHOSTING_FLAGS = --specs=rdimon.specs -lc -lrdimon 
+
 # Inputs: C Sources, Assembler Sources
 SOURCES=main.c stm32f4xx_it.c system_stm32f4xx.c \
 ../Utilities/STM32F4-Discovery/stm32f4_discovery.c \
@@ -30,12 +32,12 @@ AR=arm-none-eabi-ar
 AS=arm-none-eabi-as
 CP=arm-none-eabi-objcopy
 OD=arm-none-eabi-objdump
-GDB=arm-none-eabii-gdb
+GDB=arm-none-eabi-gdb
 
 # Build Parameters: MCU Flags, Definitions, Includes, 
 #                   Compile Flags, Linker Script, Linker Flags
 
-CFLAGS=-fdiagnostics-color=always
+CFLAGS=-fdiagnostics-color=always -g
 
 MCFLAGS=-mcpu=cortex-m4 -mthumb -mlittle-endian \
 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork
@@ -92,7 +94,7 @@ $(TARGET): $(EXECUTABLE)
 	@echo "Objcopy from ELF to IHEX complete!\n"
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	$(CC) $(LDFLAGS) $(OBJECTS) $(SEMIHOSTING_FLAGS) -o $@
 	@echo "Linking complete!\n"
 
 %.o: %.c
@@ -103,10 +105,13 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 	@echo "Assambled "$<"!\n"
 
+BOARDCONFIGPATH=board/stm32f4discovery.cfg	
 .PHONY: clean
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE) $(TARGET)
 gdb:
+	
+	$(GDB) $(PROJ_NAME).elf -ex 'target remote | openocd -c "gdb_port pipe" -f $(BOARDCONFIGPATH)'
 	
 test:
 	@echo "$(SOURCES)"
