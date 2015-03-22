@@ -67,11 +67,6 @@ int main(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
-	//Disable STDOUT buffering. Otherwise nothing will be printed before 
-	//a newline character or when the buffer is flushed. This MUST be done 
-	//before any writes to STDOUT to have any effect...
-	setbuf(stdout, NULL);
-	PRINTF("TESTING SEMIHOSTING");
 
 	while (1)
 	{
