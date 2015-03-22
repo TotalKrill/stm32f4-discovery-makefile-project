@@ -19,7 +19,7 @@ INCLUDES=
 # Autosearch and include everything from the inc sublfolder and compile everything 
 # from the src folder
 
-PROJ = $(wildcard ./modules/*)
+PROJ = $(wildcard ./dev/*)
 $(foreach dir, $(MODULES) , $(eval PROJ_INC += $(dir)/inc))
 $(foreach dir, $(MODULES), $(eval PROJ_CSRCS += $(wildcard $(dir)/src/*.c)))
 $(foreach dir, $(MODULES), $(eval PROJ_ASRCS += $(wildcard $(dir)/src/*.s)))
