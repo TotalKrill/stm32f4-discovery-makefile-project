@@ -1,4 +1,4 @@
-#Project main setup
+#Project main setup, theese things must be edited per cpu / programmer
 
 PROJ_NAME=template
 
