@@ -1,6 +1,6 @@
 #Project main setup
 
-PROJ_NAME=Template
+PROJ_NAME=template
 
 MCU=STM32F4xx
 
@@ -20,9 +20,9 @@ INCLUDES=
 # from the src folder
 
 PROJ = $(wildcard ./dev/*)
-$(foreach dir, $(MODULES) , $(eval PROJ_INC += $(dir)/inc))
-$(foreach dir, $(MODULES), $(eval PROJ_CSRCS += $(wildcard $(dir)/src/*.c)))
-$(foreach dir, $(MODULES), $(eval PROJ_ASRCS += $(wildcard $(dir)/src/*.s)))
+PROJ_INC += $(PROJ)/inc
+PROJ_CSRCS += $(wildcard $(PROJ)/src/*.c)
+PROJ_ASRCS += $(wildcard $(PROJ)/src/*.s)
 
 
 # GNU ARM Embedded Toolchain
